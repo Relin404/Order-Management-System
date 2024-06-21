@@ -17,7 +17,6 @@ model User {
   id          Int       @id @default(autoincrement())
   name        String
   email       String    @unique
-  username    String    @unique
   password    String
   phoneNumber String    @unique
   joinedAt    DateTime  @default(now())
@@ -66,31 +65,33 @@ model Order {
 
 model OrderItem {
   id        Int     @id @default(autoincrement())
-  order     Order   @relation(fields: [orderId], references: [id])
-  orderId   Int
-  product   Product @relation(fields: [productId], references: [id])
-  productId Int
   quantity  Int
-  price     Float
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@unique([orderId, productId])
 }
 
 model Cart {
   id        Int        @id @default(autoincrement())
-  userId    Int        @unique
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  userId    Int        @unique
   user      User       @relation(fields: [userId], references: [id])
   cartItems CartItem[]
 }
 
 model CartItem {
   id        Int     @id @default(autoincrement())
+  quantity  Int
   cartId    Int
   cart      Cart    @relation(fields: [cartId], references: [id])
   productId Int
   product   Product @relation(fields: [productId], references: [id])
-  quantity  Int
-  price     Float
+
+  @@unique([cartId, productId])
 }
 
 enum Status {
