@@ -1,23 +1,24 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { UnknownExceptionsFilter } from 'src/common/exception-filters/unknown-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
-
+  const { httpAdapter } = app.get(HttpAdapterHost);
   app.setGlobalPrefix('api');
 
+  app.useGlobalFilters(new UnknownExceptionsFilter(httpAdapter));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
+      transform: true,
     }),
   );
-
-  // app.useGlobalFilters(new UnknownExceptionsFilter(httpAdapter));
 
   const swaggerOptions = new DocumentBuilder()
     .setTitle('Slash Assessment API')
