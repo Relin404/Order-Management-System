@@ -19,9 +19,10 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     const user = await this.usersRepository.create(createUserDto);
-    user.password = undefined;
 
     await this.cartService.createCart(user.id);
+
+    user.password = undefined;
 
     return user;
   }

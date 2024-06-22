@@ -18,7 +18,6 @@ import {
   ApiOperation,
   ApiResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
 @ApiTags('Users')
@@ -33,8 +32,12 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
-  async getUserOrdersHistory(@Param('id', ParseIntPipe) id: number) {
-    return await this.usersService.getUserOrdersHistory(id);
+  @ApiResponse({ status: 200, description: 'Orders history found' })
+  @ApiNotFoundResponse({ description: 'Orders history not found' })
+  @ApiOperation({ summary: 'Public' })
+  @Get(':userId/orders')
+  async getUserOrdersHistory(@Param('userId', ParseIntPipe) userId: number) {
+    return await this.usersService.getUserOrdersHistory(userId);
   }
 
   @ApiResponse({ status: 200, description: 'User found' })
@@ -48,7 +51,6 @@ export class UsersController {
   @ApiBody({ type: UpdateUserDto, description: 'User data' })
   @ApiResponse({ status: 200, description: 'User updated' })
   @ApiNotFoundResponse({ description: 'User not found' })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -58,7 +60,6 @@ export class UsersController {
   }
 
   @ApiResponse({ status: 200, description: 'User deleted' })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiNotFoundResponse({ description: 'User not found' })
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
