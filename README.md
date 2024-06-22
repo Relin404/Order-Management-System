@@ -89,7 +89,7 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
-## Test
+## Testing the app
 
 ```bash
 # unit tests
