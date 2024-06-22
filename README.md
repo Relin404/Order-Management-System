@@ -2,7 +2,6 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
-
   <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
     <p align="center">
 <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
@@ -20,19 +19,64 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+# Order Management System API
+
+An order management system (OMS) API for Slash e-commerce mobile app.
+
+## Technologies
+
+- Node.js
+- TypeScript
+- Nest.js
+- PostgreSQL
+- Prisma
+- Swagger
+- JWT Authentication *(in progress)*
+
 ## Architecture
 
 ### Database
 
 ![Database Diagram](./arch/dbdiagram.png)
 
-## Installation
+### Dependency Graph
 
-```bash
-pnpm install
-```
+![Dependecy Graph](./arch/dependencies.png)
 
 ## Running the app
+
+1. **Clone the repository:**
+
+```bash
+git clone https://github.com/relin404/slash-assessment.git
+cd slash-assessment
+```
+
+2. **Install required packages:**
+
+```bash
+pnpm install # can also use npm or yarn instead of pnpm
+```
+
+3. **Build and start the Postgres Docker container:**
+
+*Make sure to have [Docker Compose](https://docs.docker.com/compose/install/) installed.*
+
+```bash
+docker-compose up -d
+```
+
+This command will start the Postgres container in detached mode.
+
+4. **Generate Prisma artifacts:**
+
+```bash
+pnpm dlx prisma generate # can also use npx instead of 'pnpm dlx'
+```
+
+This command will generate Prisma artifacts required for the repositories to work properly.
+
+5. **Run the application:**
 
 ```bash
 # development
@@ -57,17 +101,3 @@ $ pnpm run test:e2e
 # test coverage
 $ pnpm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
