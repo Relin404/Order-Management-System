@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { UpdateUserDto } from 'src/modules/users/dtos/update-user.dto';
 import { CreateUserDto } from 'src/modules/users/dtos/create-user.dto';
@@ -11,12 +11,22 @@ export class UsersRepository {
   async create(createUserDto: CreateUserDto) {
     const hashedPassword = await this.hashPassword(createUserDto.password);
 
-    const user = await this.prismaClient.user.create({
-      data: {
-        ...createUserDto,
-        password: hashedPassword,
-      },
-    });
+    let user;
+
+    try {
+      user = await this.prismaClient.user.create({
+        data: {
+          ...createUserDto,
+          password: hashedPassword,
+        },
+      });
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ConflictException('User already exists');
+      }
+
+      throw error;
+    }
 
     return user;
   }
