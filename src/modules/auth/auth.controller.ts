@@ -1,26 +1,36 @@
-import { Controller, HttpCode } from '@nestjs/common';
+import { Controller, HttpCode, Post } from '@nestjs/common';
 import {
   ApiBody,
   ApiConflictResponse,
   ApiOperation,
   ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { LoginDto } from 'src/modules/auth/dtos/login.dto';
 import { SignupDto } from 'src/modules/auth/dtos/signup.dto';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiOperation({ summary: 'Signup', operationId: 'signup' })
   @ApiBody({ type: SignupDto, description: 'User data' })
-  @ApiOperation({ summary: 'Public' })
+  @ApiResponse({ status: 201, description: 'User created' })
   @ApiConflictResponse({ description: 'User already exists' })
   @HttpCode(201)
+  @Post('signup')
   async signup(signUpDto: SignupDto) {
     return await this.authService.signup(signUpDto);
   }
 
+  @ApiOperation({ summary: 'Login', operationId: 'login' })
+  @ApiBody({ type: LoginDto, description: 'User credentials' })
+  @ApiResponse({ status: 200, description: 'User logged in' })
+  @ApiUnauthorizedResponse({ status: 401, description: 'Invalid credentials' })
+  @Post('login')
   async login(loginDto: LoginDto) {
     return await this.authService.login(loginDto);
   }
