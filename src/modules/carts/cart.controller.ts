@@ -8,12 +8,24 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiNotFoundResponse,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CartService } from 'src/modules/carts/cart.service';
 
+@ApiTags('Cart')
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
+  @ApiBody({ type: 'number', description: 'Product ID' })
+  @ApiResponse({ status: 200, description: 'Product added to cart' })
+  @ApiNotFoundResponse({ status: 404, description: 'Product not found' })
   @Post('/add')
   async addProductToCart(@Body() addProductToCartDto: any) {
     const cart = await this.cartService.addProductToCart(
@@ -25,6 +37,8 @@ export class CartController {
     return cart;
   }
 
+  @ApiParam({ name: 'userId', type: 'number' })
+  @ApiResponse({ status: 200, description: 'Cart found' })
   @Get('/:userId')
   async getCart(@Param('userId', ParseIntPipe) userId: number) {
     const cart = await this.cartService.getCart(userId);
@@ -42,6 +56,9 @@ export class CartController {
     return cartItem;
   }
 
+  @ApiParam({ name: 'cartId', type: 'number' })
+  @ApiResponse({ status: 200, description: 'Product removed from cart' })
+  @ApiNotFoundResponse({ status: 404, description: 'Product not found' })
   @Delete('/:cartId')
   async removeProductFromCart(
     @Param('cartId', ParseIntPipe) cartId: number,
