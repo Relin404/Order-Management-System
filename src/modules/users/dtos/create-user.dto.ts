@@ -6,6 +6,7 @@ import {
   IsNumber,
   IsNumberString,
   IsString,
+  IsStrongPassword,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -33,8 +34,19 @@ export class CreateUserDto {
   })
   @IsNotEmpty()
   @IsString()
+  @IsStrongPassword(
+    {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    },
+    {
+      message: 'password too weak',
+    },
+  )
   password: string;
-
   @ApiProperty({
     description: 'User phone number',
     type: 'string',
