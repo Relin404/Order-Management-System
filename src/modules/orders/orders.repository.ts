@@ -70,7 +70,7 @@ export class OrdersRepository {
   }
 
   async applyCoupon(orderId: number, discount: number) {
-    const orderPrice = await this.prismaClient.order.findUnique({
+    const order = await this.prismaClient.order.findUnique({
       where: { id: orderId },
       select: { total: true },
     });
@@ -79,7 +79,7 @@ export class OrdersRepository {
       where: { id: orderId },
       data: {
         discount,
-        total: orderPrice.total - orderPrice.total * discount,
+        total: order.total - order.total * discount,
       },
     });
   }
