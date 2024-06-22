@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CartService } from 'src/modules/carts/cart.service';
 import { OrderItemsRepository } from 'src/modules/order-items/order-items.repository';
 import { ApplyCouponDto } from 'src/modules/orders/dtos/apply-coupon.dto';
@@ -16,33 +16,42 @@ export class OrdersService {
   ) {}
 
   async createOrder(userId: number, addressId: number) {
-    return await this.prismaClient.$transaction(async () => {
-      const cart = await this.cartService.getCart(userId);
+    let order;
+    try {
+      order = await this.prismaClient.$transaction(async () => {
+        const cart = await this.cartService.getCart(userId);
 
-      if (!cart.cartItems.length) throw new Error('Cart is empty');
-      const order = await this.ordersRepository.createPendingOrder(
-        userId,
-        addressId,
-      );
-
-      let total = 0;
-
-      for (const cartItem of cart.cartItems) {
-        await this.orderItemsRepository.createOrderItem(
-          order.id,
-          cartItem.productId,
-          cartItem.quantity,
+        if (!cart.cartItems.length)
+          throw new HttpException('Cart is empty', 400);
+        const order = await this.ordersRepository.createPendingOrder(
+          userId,
+          addressId,
         );
 
-        total += cartItem.product.price * cartItem.quantity;
-      }
+        let total = 0;
 
-      await this.ordersRepository.updateOrderTotal(order.id, total);
+        for (const cartItem of cart.cartItems) {
+          await this.orderItemsRepository.createOrderItem(
+            order.id,
+            cartItem.productId,
+            cartItem.quantity,
+          );
 
-      await this.cartService.clearCart(cart.id);
+          total += cartItem.product.price * cartItem.quantity;
+        }
 
-      return order;
-    });
+        await this.ordersRepository.updateOrderTotal(order.id, total);
+
+        await this.cartService.clearCart(cart.id);
+
+        return order;
+      });
+    } catch (error) {
+      if (error.code === 'P2028')
+        throw new HttpException('Transaction error', 400);
+
+      throw new HttpException(error.message, error.status);
+    }
   }
 
   async getOrders(userId: number) {
