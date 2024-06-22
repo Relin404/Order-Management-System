@@ -6,7 +6,7 @@ import { CartModule } from 'src/modules/carts/cart.module';
 import { OrdersRepository } from 'src/modules/orders/orders.repository';
 
 @Module({
-  imports: [CartModule, OrdersModule, OrderItemsModule],
+  imports: [CartModule, OrderItemsModule],
   controllers: [OrdersController],
   providers: [OrdersService, OrdersRepository],
   exports: [OrdersService, OrdersRepository],
