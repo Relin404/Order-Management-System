@@ -8,7 +8,7 @@ import { OrdersRepository } from 'src/modules/orders/orders.repository';
 @Module({
   imports: [CartModule, OrdersModule, OrderItemsModule],
   controllers: [OrdersController],
-  providers: [OrdersService],
-  exports: [OrdersRepository],
+  providers: [OrdersService, OrdersRepository],
+  exports: [OrdersService, OrdersRepository],
 })
 export class OrdersModule {}
