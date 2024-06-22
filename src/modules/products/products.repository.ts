@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { CreateProductDto } from 'src/modules/products/dtos/create-product.dto';
 import { UpdateProductDto } from 'src/modules/products/dtos/update-product.dto';
@@ -8,7 +8,21 @@ export class ProductsRepository {
   constructor(private readonly prismaClient: PrismaService) {}
 
   async create(createproductDto: CreateProductDto) {
-    return await this.prismaClient.product.create({ data: createproductDto });
+    let product;
+
+    try {
+      product = await this.prismaClient.product.create({
+        data: createproductDto,
+      });
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ConflictException('Product already exists');
+      }
+
+      throw error;
+    }
+
+    return product;
   }
 
   async findAll() {
