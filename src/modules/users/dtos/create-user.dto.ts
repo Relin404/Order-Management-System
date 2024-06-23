@@ -13,6 +13,7 @@ export class CreateUserDto {
   @ApiProperty({
     description: 'User name',
     type: 'string',
+    example: 'Cassie Cage',
   })
   @IsNotEmpty()
   @IsString()
@@ -22,6 +23,7 @@ export class CreateUserDto {
     description: 'User email',
     type: 'string',
     format: 'email',
+    example: 'shinnok.killer@netherrealm.com',
   })
   @IsNotEmpty()
   @IsString()
@@ -31,6 +33,7 @@ export class CreateUserDto {
   @ApiProperty({
     description: 'User password',
     type: 'string',
+    example: 'Password123!',
   })
   @IsNotEmpty()
   @IsString()
@@ -47,9 +50,11 @@ export class CreateUserDto {
     },
   )
   password: string;
+
   @ApiProperty({
     description: 'User phone number',
     type: 'string',
+    example: '01223456789',
   })
   @IsNotEmpty()
   @IsNumberString()
