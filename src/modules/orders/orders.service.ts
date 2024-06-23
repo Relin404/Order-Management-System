@@ -43,8 +43,6 @@ export class OrdersService {
         await this.ordersRepository.updateOrderTotal(order.id, total);
 
         await this.cartService.clearCart(cart.id);
-
-        return order;
       });
     } catch (error) {
       if (error.code === 'P2028')
@@ -52,6 +50,8 @@ export class OrdersService {
 
       throw new HttpException(error.message, error.status);
     }
+
+    return order;
   }
 
   async getOrders(userId: number) {
