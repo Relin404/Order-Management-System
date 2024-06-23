@@ -1,4 +1,4 @@
-import { Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import {
   ApiBody,
   ApiConflictResponse,
@@ -22,7 +22,7 @@ export class AuthController {
   @ApiConflictResponse({ description: 'User already exists' })
   @HttpCode(201)
   @Post('signup')
-  async signup(signUpDto: SignupDto) {
+  async signup(@Body() signUpDto: SignupDto) {
     return await this.authService.signup(signUpDto);
   }
 
@@ -31,7 +31,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'User logged in' })
   @ApiUnauthorizedResponse({ status: 401, description: 'Invalid credentials' })
   @Post('login')
-  async login(loginDto: LoginDto) {
+  async login(@Body() loginDto: LoginDto) {
     return await this.authService.login(loginDto);
   }
 }
