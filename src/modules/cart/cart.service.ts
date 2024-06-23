@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CartItemsRepository } from 'src/modules/cart-items/cart-items.repository';
-import { CartRepository } from 'src/modules/carts/cart.repository';
+import { CartRepository } from 'src/modules/cart/cart.repository';
 import { ProductsRepository } from 'src/modules/products/products.repository';
 
 @Injectable()
