@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { CreateProductDto } from 'src/modules/products/dtos/create-product.dto';
 import { UpdateProductDto } from 'src/modules/products/dtos/update-product.dto';
@@ -41,6 +45,18 @@ export class ProductsRepository {
   }
 
   async delete(id: number) {
-    return await this.prismaClient.product.delete({ where: { id } });
+    let product;
+
+    try {
+      product = await this.prismaClient.product.delete({ where: { id } });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Product not found');
+      }
+
+      throw error;
+    }
+
+    return product;
   }
 }

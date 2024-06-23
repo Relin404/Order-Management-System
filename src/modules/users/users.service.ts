@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CartService } from 'src/modules/cart/cart.service';
 import { OrdersService } from 'src/modules/orders/orders.service';
 import { CreateUserDto } from 'src/modules/users/dtos/create-user.dto';
@@ -36,13 +32,11 @@ export class UsersService {
 
     if (!user) throw new NotFoundException('User not found');
 
-    user.password = undefined;
-
     return user;
   }
 
   async findOneByEmail(email: string) {
-    const user = await this.usersRepository.findOneByEmail(email);
+    const user = await this.usersRepository.findOneByEmailUnsafe(email);
 
     if (!user) throw new NotFoundException('User not found');
 
@@ -52,15 +46,15 @@ export class UsersService {
   }
 
   async getUserOrdersHistory(userId: number) {
+    const user = await this.usersRepository.findOne(userId);
+
+    if (!user) throw new NotFoundException('User not found');
+
     return await this.ordersService.getOrders(userId);
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.usersRepository.update(id, updateUserDto);
-
-    if (!user) throw new NotFoundException('User not found');
-
-    user.password = undefined;
 
     return user;
   }
@@ -68,15 +62,11 @@ export class UsersService {
   async delete(id: number) {
     const user = await this.usersRepository.delete(id);
 
-    if (!user) throw new NotFoundException('User not found');
-
-    user.password = undefined;
-
     return user;
   }
 
   async validatePassword(email: string, password: string) {
-    const user = await this.usersRepository.findOneByEmail(email);
+    const user = await this.usersRepository.findOneByEmailUnsafe(email);
 
     return this.usersRepository.validatePassword(password, user.password);
   }

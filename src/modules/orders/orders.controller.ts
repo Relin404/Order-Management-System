@@ -52,6 +52,10 @@ export class OrdersController {
     return await this.ordersService.getOrder(orderId);
   }
 
+  @ApiOperation({
+    summary: 'Update order status',
+    operationId: 'updateOrderStatus',
+  })
   @ApiParam({ name: 'orderId', type: 'number' })
   @ApiBody({ type: UpdateOrderStatusDto, description: 'Order status' })
   @ApiResponse({ status: 200, description: 'Order status updated' })

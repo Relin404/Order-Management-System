@@ -34,8 +34,6 @@ export class ProductsService {
   async delete(id: number) {
     const product = await this.productsRepository.delete(id);
 
-    if (!product) throw new NotFoundException('Product not found');
-
     return product;
   }
 }

@@ -1,5 +1,9 @@
 import * as bcrypt from 'bcrypt';
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { UpdateUserDto } from 'src/modules/users/dtos/update-user.dto';
 import { CreateUserDto } from 'src/modules/users/dtos/create-user.dto';
@@ -21,9 +25,8 @@ export class UsersRepository {
         },
       });
     } catch (error) {
-      if (error.code === 'P2002') {
+      if (error.code === 'P2002')
         throw new ConflictException('User already exists');
-      }
 
       throw error;
     }
@@ -32,33 +35,85 @@ export class UsersRepository {
   }
 
   async findAll() {
-    return await this.prismaClient.user.findMany();
+    const users = await this.prismaClient.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        phoneNumber: true,
+        joinedAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return users;
   }
 
   async findOne(id: number) {
-    return await this.prismaClient.user.findUnique({ where: { id } });
+    return await this.prismaClient.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        phoneNumber: true,
+        joinedAt: true,
+        updatedAt: true,
+      },
+    });
   }
 
-  async findOneByEmail(email: string) {
+  async findOneByEmailUnsafe(email: string) {
     return await this.prismaClient.user.findUnique({ where: { email } });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const hashedPassword = await this.hashPassword(updateUserDto.password);
+    let user;
 
-    const user = await this.prismaClient.user.update({
-      where: { id },
-      data: {
-        ...updateUserDto,
-        password: hashedPassword,
-      },
-    });
+    try {
+      user = await this.prismaClient.user.update({
+        where: { id },
+        data: updateUserDto,
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          phoneNumber: true,
+          joinedAt: true,
+          updatedAt: true,
+        },
+      });
+    } catch (error) {
+      if (error.code === 'P2025') throw new NotFoundException('User not found');
+
+      throw error;
+    }
 
     return user;
   }
 
   async delete(id: number) {
-    return await this.prismaClient.user.delete({ where: { id } });
+    let user;
+
+    try {
+      user = await this.prismaClient.user.delete({
+        where: { id },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          phoneNumber: true,
+          joinedAt: true,
+          updatedAt: true,
+        },
+      });
+    } catch (error) {
+      if (error.code === 'P2025') throw new NotFoundException('User not found');
+
+      throw error;
+    }
+
+    return user;
   }
 
   async hashPassword(password: string) {
