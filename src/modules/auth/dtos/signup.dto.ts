@@ -11,6 +11,7 @@ export class SignupDto {
   @ApiProperty({
     description: 'User name',
     type: 'string',
+    example: 'Johnny Cage',
   })
   @IsNotEmpty()
   @IsString()
@@ -20,6 +21,7 @@ export class SignupDto {
     description: 'User email',
     type: 'string',
     format: 'email',
+    example: 'ballbuster69@gmail.com',
   })
   @IsNotEmpty()
   @IsString()
@@ -29,6 +31,7 @@ export class SignupDto {
   @ApiProperty({
     description: 'User password',
     type: 'string',
+    example: 'Password123!',
   })
   @IsNotEmpty()
   @IsString()
@@ -49,6 +52,7 @@ export class SignupDto {
   @ApiProperty({
     description: 'User phone number',
     type: 'string',
+    example: '01223456789',
   })
   @IsNotEmpty()
   @IsNumberString()
