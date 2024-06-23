@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CartModule } from 'src/modules/carts/cart.module';
+import { CartModule } from 'src/modules/cart/cart.module';
 import { OrdersModule } from 'src/modules/orders/orders.module';
 import { UsersController } from 'src/modules/users/users.controller';
 import { UsersRepository } from 'src/modules/users/users.repository';
