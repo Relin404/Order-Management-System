@@ -1,5 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { CartService } from 'src/modules/carts/cart.service';
+import { CartService } from 'src/modules/cart/cart.service';
 import { OrderItemsRepository } from 'src/modules/order-items/order-items.repository';
 import { ApplyCouponDto } from 'src/modules/orders/dtos/apply-coupon.dto';
 import { UpdateOrderStatusDto } from 'src/modules/orders/dtos/update-order-status.dto';

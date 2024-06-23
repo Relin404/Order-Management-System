@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class ApplyCouponDto {
   @ApiProperty({
+    description: 'Order ID',
     type: 'number',
     example: 1,
   })
@@ -11,6 +12,7 @@ export class ApplyCouponDto {
   orderId: number;
 
   @ApiProperty({
+    description: 'Discount percentage',
     type: 'number',
     example: 0.25,
   })
