@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CartService } from 'src/modules/carts/cart.service';
+import { CartService } from 'src/modules/cart/cart.service';
 import { OrdersService } from 'src/modules/orders/orders.service';
 import { CreateUserDto } from 'src/modules/users/dtos/create-user.dto';
 import { UpdateUserDto } from 'src/modules/users/dtos/update-user.dto';
