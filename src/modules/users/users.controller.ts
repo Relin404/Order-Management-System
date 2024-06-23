@@ -25,8 +25,8 @@ import {
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiResponse({ status: 200, description: 'Users found' })
   @ApiOperation({ summary: 'Find all users', operationId: 'findAll' })
+  @ApiResponse({ status: 200, description: 'Users found' })
   @Get()
   async findAll() {
     return await this.usersService.findAll();
@@ -44,15 +44,16 @@ export class UsersController {
     return await this.usersService.getUserOrdersHistory(userId);
   }
 
+  @ApiOperation({ summary: 'Get user by ID', operationId: 'getUser' })
   @ApiParam({ name: 'id', type: 'number' })
   @ApiResponse({ status: 200, description: 'User found' })
   @ApiNotFoundResponse({ description: 'User not found' })
-  @ApiOperation({ summary: 'Get user by ID', operationId: 'getUser' })
   @Get(':id')
   async getUser(@Param('id', ParseIntPipe) id: number) {
     return await this.usersService.findOneById(id);
   }
 
+  @ApiOperation({ summary: 'Update user', operationId: 'updateUser' })
   @ApiParam({ name: 'id', type: 'number' })
   @ApiBody({ type: UpdateUserDto, description: 'User data' })
   @ApiResponse({ status: 200, description: 'User updated' })
@@ -65,6 +66,7 @@ export class UsersController {
     return await this.usersService.update(id, updateUserDto);
   }
 
+  @ApiOperation({ summary: 'Delete user', operationId: 'deleteUser' })
   @ApiParam({ name: 'id', type: 'number' })
   @ApiResponse({ status: 200, description: 'User deleted' })
   @ApiNotFoundResponse({ description: 'User not found' })
