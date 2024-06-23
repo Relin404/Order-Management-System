@@ -12,8 +12,8 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const { httpAdapter } = app.get(HttpAdapterHost);
-  app.setGlobalPrefix('api');
 
+  app.setGlobalPrefix('api');
   app.useGlobalFilters(new UnknownExceptionsFilter(httpAdapter));
   app.useGlobalPipes(
     new ValidationPipe({
@@ -51,6 +51,7 @@ async function bootstrap() {
 
   const port = configService.get<number>('PORT');
   await app.listen(port);
+
   logger.log(
     `Swagger documentation is available at http://localhost:${port}/api/docs`,
   );
