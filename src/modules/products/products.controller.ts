@@ -27,6 +27,7 @@ import { ProductsService } from 'src/modules/products/products.service';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @ApiOperation({ summary: 'Create product', operationId: 'create' })
   @ApiBody({ type: CreateProductDto, description: 'Product data' })
   @ApiResponse({ status: 201, description: 'Product created' })
   @ApiConflictResponse({ description: 'Product already exists' })
@@ -52,6 +53,7 @@ export class ProductsController {
     return await this.productsService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Update product', operationId: 'update' })
   @ApiParam({ name: 'id', type: 'number' })
   @ApiBody({ type: UpdateProductDto, description: 'Product data' })
   @ApiResponse({ status: 200, description: 'Product updated' })
@@ -64,6 +66,7 @@ export class ProductsController {
     return await this.productsService.update(id, updateProductDto);
   }
 
+  @ApiOperation({ summary: 'Delete product', operationId: 'delete' })
   @ApiParam({ name: 'id', type: 'number' })
   @ApiResponse({ status: 200, description: 'Product deleted' })
   @ApiNotFoundResponse({ description: 'Product not found' })
