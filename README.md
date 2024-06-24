@@ -41,7 +41,53 @@ An order management system (OMS) API for Slash e-commerce mobile app.
 
 ### Dependency Graph
 
-![Dependecy Graph](./arch/dependencies.png)
+```mermaid
+flowchart LR
+    AppModule["AppModule"]
+
+    PrismaModule["PrismaModule"]
+     
+    AuthModule["AuthModule"]
+    
+    UsersModule["UsersModule"]
+    
+    ProductsModule["ProductsModule"]
+    
+    CartModule["CartModule"]
+    
+    OrdersModule["OrdersModule"]
+    
+    CartItemsModule["CartItemsModule"]
+    
+    OrderItemsModule["OrderItemsModule"]
+    
+    AppModule --> PrismaModule
+    AppModule --> AuthModule
+    AppModule --> UsersModule
+    AppModule --> ProductsModule
+    AppModule --> CartModule
+    AppModule --> OrdersModule
+    AppModule --> CartItemsModule
+    AppModule --> OrderItemsModule
+
+    AuthModule --> UsersModule
+
+    UsersModule --> CartModule
+    UsersModule --> OrdersModule
+    UsersModule --> PrismaModule
+    
+    CartModule --> CartItemsModule
+    CartModule --> ProductsModule
+    CartModule --> PrismaModule
+
+    OrdersModule --> CartModule
+    OrdersModule --> OrderItemsModule
+    OrdersModule --> PrismaModule
+
+    CartItemsModule --> PrismaModule
+
+    OrderItemsModule --> PrismaModule
+```
 
 ## Running the app
 
