@@ -7,6 +7,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { Public } from 'src/common/decorators/public.decorator';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { LoginDto } from 'src/modules/auth/dtos/login.dto';
 import { SignupDto } from 'src/modules/auth/dtos/signup.dto';
@@ -21,6 +22,7 @@ export class AuthController {
   @ApiResponse({ status: 201, description: 'User created' })
   @ApiConflictResponse({ description: 'User already exists' })
   @HttpCode(HttpStatus.CREATED)
+  @Public()
   @Post('signup')
   async signup(@Body() signUpDto: SignupDto) {
     return await this.authService.signup(signUpDto);
@@ -30,6 +32,7 @@ export class AuthController {
   @ApiBody({ type: LoginDto, description: 'User credentials' })
   @ApiResponse({ status: 200, description: 'User logged in' })
   @ApiUnauthorizedResponse({ status: 401, description: 'Invalid credentials' })
+  @Public()
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     return await this.authService.login(loginDto);
