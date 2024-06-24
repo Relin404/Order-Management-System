@@ -8,11 +8,14 @@ import { OrdersModule } from 'src/modules/orders/orders.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from 'src/modules/prisma/prisma.module';
+import { AuthGuard } from 'src/common/guards/auth.guard';
+import { jwtConfig } from 'src/config/jwt.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [jwtConfig],
     }),
     AuthModule,
     CartModule,
@@ -22,6 +25,12 @@ import { PrismaModule } from 'src/modules/prisma/prisma.module';
     PrismaModule,
     ProductsModule,
     UsersModule,
+  ],
+  providers: [
+    {
+      provide: 'APP_GUARD',
+      useClass: AuthGuard,
+    },
   ],
 })
 export class AppModule {}
