@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
@@ -31,7 +32,7 @@ export class ProductsController {
   @ApiBody({ type: CreateProductDto, description: 'Product data' })
   @ApiResponse({ status: 201, description: 'Product created' })
   @ApiConflictResponse({ description: 'Product already exists' })
-  @HttpCode(201)
+  @HttpCode(HttpStatus.CREATED)
   @Post()
   async create(@Body() createProductDto: CreateProductDto) {
     return await this.productsService.create(createProductDto);

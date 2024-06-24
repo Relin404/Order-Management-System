@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import {
   ApiBody,
   ApiConflictResponse,
@@ -20,7 +20,7 @@ export class AuthController {
   @ApiBody({ type: SignupDto, description: 'User data' })
   @ApiResponse({ status: 201, description: 'User created' })
   @ApiConflictResponse({ description: 'User already exists' })
-  @HttpCode(201)
+  @HttpCode(HttpStatus.CREATED)
   @Post('signup')
   async signup(@Body() signUpDto: SignupDto) {
     return await this.authService.signup(signUpDto);
