@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -34,7 +35,7 @@ export class OrdersController {
     summary: 'Create order',
     operationId: 'createOrder',
   })
-  @HttpCode(201)
+  @HttpCode(HttpStatus.CREATED)
   @Post()
   async createOrder(@Body() createOrderDto: CreateOrderDto) {
     return await this.ordersService.createOrder(
