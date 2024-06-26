@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UnknownExceptionsFilter } from 'src/common/exception-filters/unknown-exceptions.filter';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const logger = new Logger('bootstrap');
@@ -22,8 +23,14 @@ async function bootstrap() {
     }),
   );
 
-  const swaggerOptions = new DocumentBuilder()
+  app.use(
+    cookieParser(configService.get<string>('COOKIE_SECRET'), {
+      httpOnly: true,
+      signed: true,
+    } as any),
+  );
 
+  const swaggerOptions = new DocumentBuilder()
     .setTitle('Slash Assessment API')
     .setDescription(
       'Slash Order Management System API for e-commerce mobile app',

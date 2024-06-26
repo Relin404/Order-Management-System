@@ -19,6 +19,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Public } from 'src/common/decorators/public.decorator';
 import { CreateProductDto } from 'src/modules/products/dtos/create-product.dto';
 import { UpdateProductDto } from 'src/modules/products/dtos/update-product.dto';
 import { ProductsService } from 'src/modules/products/products.service';
@@ -40,6 +41,7 @@ export class ProductsController {
 
   @ApiOperation({ summary: 'Find all products', operationId: 'findAll' })
   @ApiResponse({ status: 200, description: 'Products found' })
+  @Public()
   @Get()
   async findAll() {
     return await this.productsService.findAll();
@@ -49,6 +51,7 @@ export class ProductsController {
   @ApiParam({ name: 'id', type: 'number' })
   @ApiResponse({ status: 200, description: 'Product found' })
   @ApiNotFoundResponse({ description: 'Product not found' })
+  @Public()
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.productsService.findOne(id);

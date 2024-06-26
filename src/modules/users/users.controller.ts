@@ -18,6 +18,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @ApiTags('Users')
 @Controller('users')
@@ -26,6 +27,7 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Find all users', operationId: 'findAll' })
   @ApiResponse({ status: 200, description: 'Users found' })
+  @Public()
   @Get()
   async findAll() {
     return await this.usersService.findAll();
@@ -47,6 +49,7 @@ export class UsersController {
   @ApiParam({ name: 'id', type: 'number' })
   @ApiResponse({ status: 200, description: 'User found' })
   @ApiNotFoundResponse({ description: 'User not found' })
+  @Public()
   @Get(':id')
   async getUser(@Param('id', ParseIntPipe) id: number) {
     return await this.usersService.findOneById(id);

@@ -30,8 +30,6 @@ export class UsersService {
   async findOneById(id: number) {
     const user = await this.usersRepository.findOne(id);
 
-    if (!user) throw new NotFoundException('User not found');
-
     return user;
   }
 
@@ -47,8 +45,6 @@ export class UsersService {
 
   async getUserOrdersHistory(userId: number) {
     const user = await this.usersRepository.findOne(userId);
-
-    if (!user) throw new NotFoundException('User not found');
 
     return await this.ordersService.getOrders(userId);
   }
@@ -66,8 +62,8 @@ export class UsersService {
   }
 
   async validatePassword(email: string, password: string) {
-    const user = await this.usersRepository.findOneByEmailUnsafe(email);
+    const user = await this.usersRepository.validatePassword(email, password);
 
-    return this.usersRepository.validatePassword(password, user.password);
+    return user;
   }
 }
