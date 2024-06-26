@@ -1,48 +1,23 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
+import { ExecutionContext, Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
-  constructor(
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
-    private readonly reflector: Reflector,
-  ) {}
-
-  async canActivate(context: ExecutionContext) {
-    const isPublic = this.reflector.getAllAndOverride<boolean>('public', [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    if (isPublic) return true;
-
-    const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
-    if (!token) throw new UnauthorizedException();
-
-    try {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.configService.get<string>('jwt.accessToken.secret'),
-      });
-      request['user'] = payload;
-    } catch (error) {
-      throw new UnauthorizedException();
-    }
-
-    return true;
+export class JwtGuard extends AuthGuard('jwt') {
+  constructor(private reflector: Reflector) {
+    super();
   }
 
-  private extractTokenFromHeader(request: Request) {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+  canActivate(context: ExecutionContext) {
+    const req = context.switchToHttp().getRequest<Request>();
+    if (req.cookies.accessToken) return super.canActivate(context) as boolean;
 
-    return type === 'Bearer' ? token : undefined;
+    return (
+      this.reflector.getAllAndOverride('public', [
+        context.getHandler(),
+        context.getClass(),
+      ]) || (super.canActivate(context) as boolean)
+    );
   }
 }
