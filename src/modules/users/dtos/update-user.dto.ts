@@ -19,4 +19,13 @@ export class UpdateUserDto {
   @IsOptional()
   @IsNumberString()
   phoneNumber?: string;
+
+  @ApiPropertyOptional({
+    description: 'User refresh token',
+    type: 'string',
+    example: 'refreshToken',
+  })
+  @IsOptional()
+  @IsString()
+  refreshToken?: string;
 }
