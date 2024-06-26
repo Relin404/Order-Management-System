@@ -31,7 +31,7 @@ An order management system (OMS) API for Slash e-commerce mobile app.
 - PostgreSQL
 - Prisma
 - Swagger
-- JWT Authentication *(in progress)*
+- JWT Authentication
 
 ## Architecture
 
