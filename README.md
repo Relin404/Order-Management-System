@@ -35,7 +35,7 @@ An order management system (OMS) API for Slash e-commerce mobile app.
 
 ## Architecture
 
-### Database
+### [Database Diagram](https://dbdocs.io/ahmadmashaal01/Order-Management-System?view=relationships)
 
 ![Database Diagram](./arch/dbdiagram.png)
 
