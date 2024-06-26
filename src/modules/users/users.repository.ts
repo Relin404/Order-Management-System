@@ -7,6 +7,7 @@ import {
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { UpdateUserDto } from 'src/modules/users/dtos/update-user.dto';
 import { CreateUserDto } from 'src/modules/users/dtos/create-user.dto';
+import { UserData } from 'src/modules/users/types/user-data.type';
 
 @Injectable()
 export class UsersRepository {
@@ -50,17 +51,28 @@ export class UsersRepository {
   }
 
   async findOne(id: number) {
-    return await this.prismaClient.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        phoneNumber: true,
-        joinedAt: true,
-        updatedAt: true,
-      },
-    });
+    let user;
+
+    try {
+      user = await this.prismaClient.user.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          phoneNumber: true,
+          refreshToken: true,
+          joinedAt: true,
+          updatedAt: true,
+        },
+      });
+    } catch (error) {
+      if (error.code === 'P2025') throw new NotFoundException('User not found');
+
+      throw error;
+    }
+
+    return user;
   }
 
   async findOneByEmailUnsafe(email: string) {
@@ -122,7 +134,30 @@ export class UsersRepository {
     return await bcrypt.hash(password, salt);
   }
 
-  async validatePassword(password: string, hash: string) {
-    return await bcrypt.compare(password, hash);
+  async validatePassword(
+    email: string,
+    password: string,
+  ): Promise<UserData | null> {
+    let user: UserData;
+
+    try {
+      user = await this.prismaClient.user.findUnique({
+        where: { email },
+      });
+    } catch (error) {
+      if (error.code === 'P2025')
+        throw new NotFoundException('Invalid credentials');
+
+      throw error;
+    }
+
+    const isValid = await bcrypt.compare(password, user.password);
+    if (isValid) {
+      user.password = undefined;
+
+      return user;
+    }
+
+    return null;
   }
 }
