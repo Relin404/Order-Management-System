@@ -8,8 +8,8 @@ import { OrdersModule } from 'src/modules/orders/orders.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from 'src/modules/prisma/prisma.module';
-import { AuthGuard } from 'src/common/guards/auth.guard';
 import { jwtConfig } from 'src/config/jwt.config';
+import { JwtGuard } from 'src/common/guards/auth.guard';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { jwtConfig } from 'src/config/jwt.config';
   providers: [
     {
       provide: 'APP_GUARD',
-      useClass: AuthGuard,
+      useClass: JwtGuard,
     },
   ],
 })
