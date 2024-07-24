@@ -31,15 +31,15 @@ async function bootstrap() {
   );
 
   const swaggerOptions = new DocumentBuilder()
-    .setTitle('Slash Assessment API')
+    .setTitle('Order Management System API')
     .setDescription(
-      'Slash Order Management System API for e-commerce mobile app',
+      'Order Management System API for e-commerce mobile app',
     )
     .setVersion('1.0')
     .addServer('http://localhost:3000', 'Local Development Server')
     .setExternalDoc(
       'GitHub',
-      'https://github.com/Relin404/slash-assessment/blob/dev/README.md',
+      'https://github.com/Relin404/order-management-system/blob/dev/README.md',
     )
     .setContact(
       "Ahmad Mash'aal",
