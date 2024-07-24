@@ -21,7 +21,7 @@
 
 # Order Management System API
 
-An order management system (OMS) API for Slash e-commerce mobile app.
+An order management system (OMS) API with extensible features.
 
 ## Technologies
 
@@ -94,8 +94,8 @@ flowchart LR
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/relin404/slash-assessment.git
-cd slash-assessment
+git clone https://github.com/relin404/order-management-system.git
+cd order-management-system
 ```
 
 2. **Install required packages:**
